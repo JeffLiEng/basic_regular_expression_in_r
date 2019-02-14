@@ -1,0 +1,140 @@
+---
+title: "Basic Regular Expression in R"
+author: "Jeff Li"
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+
+"I maintained my edge by always being a student; you will always have something new to learn". - Jackie Joyner Kersee
+
+
+
+## (I) Load Required Libraries
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(stringr)
+
+```
+
+# 1. Create a test string vector
+
+```{r}
+test_string <- c("abcdABCD 1234 \t.!?\\(){}\n",
+                 "Hiphopopotamus", 
+                 "Rhymenoceros", 
+                 "time for bottomless lyrics")
+
+
+str(test_string)
+typeof(test_string)
+```
+
+# 2. Detect Patterns
+
+```{r}
+# define a test pattern 
+test_pattern1 <- "t.m"
+
+grep(pattern = test_pattern1, test_string)
+
+grep(pattern = test_pattern1, x = test_string, value = TRUE)
+
+grepl(pattern = test_pattern1, x = test_string)
+
+stringr::str_detect(string = test_string, pattern = test_pattern1)
+
+```
+
+# 3. Split a String Using a Pattern
+```{r}
+
+# define a pattern 
+test_pattern2 <- " "
+
+# method 1 
+strsplit(x = test_string, split = test_pattern2)
+
+# method 2
+stringr::str_split(string = test_string, pattern = test_pattern2) 
+```
+
+# 4 Locate Patterns 
+
+```{r}
+# Find starting position and length of first match
+regexpr(pattern = test_pattern1, text = test_string)
+
+# Find starting position and length of all matches
+gregexpr(pattern = test_pattern1, text = test_string)
+
+# find starting and end position of first match 
+stringr::str_locate(string = test_string, pattern = test_pattern1)
+
+# Find starting and end position of all mathes
+stringr::str_locate_all(string = test_string, pattern = test_pattern1) 
+
+```
+
+# 5. Extract Patterns
+
+```{r}
+# Extract first match 
+regmatches(x = test_string, 
+           m = regexpr(pattern = test_pattern1, text = test_string))
+
+# Extract all matches, output a list
+regmatches(x = test_string, 
+           m = gregexpr(pattern = test_pattern1, text = test_string))
+
+# Extract first match using "stringr"
+stringr::str_extract(string = test_string, 
+                    pattern = test_pattern1)
+
+# Extract all matches, output a list using "stringr"
+stringr::str_extract_all(string = test_string, 
+                         pattern = test_pattern1)
+
+# Extract all matches, output a matrx using "stringr"
+stringr::str_extract_all(string = test_string,
+                         pattern = test_pattern1, 
+                         simplify = TRUE)
+
+# Extract first match + individual character groups
+stringr::str_match(string = test_string, 
+                   pattern = test_pattern1)
+
+# Extract all matches + individual character groups
+stringr::str_match_all(string = test_string, 
+                       pattern = test_pattern1) 
+```
+
+
+# 6. Replace Patterns
+
+```{r}
+# Replace first match
+sub(pattern = test_pattern1, 
+    replacement = "9999", 
+    x = test_string)
+
+# Replace all matches
+gsub(pattern = test_pattern1, 
+     replacement = "9999", 
+     x = test_string)
+
+# Replace first match using "stringr"
+stringr::str_replace(string = test_string, 
+                     pattern = test_pattern1, 
+                     replacement = "9999")
+
+# Replace all matches using "stringr"
+stringr::str_replace_all(string = test_string, 
+                         pattern = test_pattern1, 
+                         replacement = "9999")
+```
+
